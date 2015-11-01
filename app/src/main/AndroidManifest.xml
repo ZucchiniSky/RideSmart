@@ -17,10 +17,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".OnCheckDrivingState">
-            <intent-filter>
-                <action android:name="android.intent.action.PHONE_STATE" />
-            </intent-filter>
+        <receiver android:name=".OnTextReceived">
             <intent-filter>
                 <action android:name="android.provider.telephony.SMS_RECEIVED"/>
             </intent-filter>
@@ -34,6 +31,7 @@
     </application>
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 </manifest>
