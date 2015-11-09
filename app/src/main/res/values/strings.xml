@@ -4,5 +4,7 @@
     <string name="app_name">RideSmart</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="automated_response">Automated Response:</string>
+    <string name="save_auto_response">Save Automated Response</string>
 
 </resources>

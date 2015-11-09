@@ -13,6 +13,7 @@ public class Utility {
 
     public static final String ENABLED = "ENABLED";
     public static final String SILENCING = "SILENCING";
+    public static final String LAST_CHECKED = "LAST_CHECKED";
     public static final String RINGER_STATE = "RINGER_STATE";
     public static final String TEXT_RESPONSE_ENABLED = "TEXT_RESPONSE_ENABLED";
     public static final String TEXT_RESPONSE_BODY = "TEXT_RESPONSE_BODY";
@@ -35,6 +36,7 @@ public class Utility {
 
         editor.putBoolean(ENABLED, false);
         editor.putBoolean(SILENCING, false);
+        editor.putLong(LAST_CHECKED, System.currentTimeMillis());
         editor.putInt(RINGER_STATE, audioManager.getRingerMode());
 
         if (!sharedPrefs.contains(TEXT_RESPONSE_ENABLED)) {

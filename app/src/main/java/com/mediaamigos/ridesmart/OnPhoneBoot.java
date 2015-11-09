@@ -11,6 +11,9 @@ import android.telephony.TelephonyManager;
 import com.google.android.gms.location.ActivityRecognitionResult;
 import com.google.android.gms.location.DetectedActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 import rx.Subscription;
 import rx.functions.Action1;
@@ -19,10 +22,19 @@ import rx.functions.Action1;
  * Created by nghiavo on 11/1/15.
  */
 public class OnPhoneBoot extends BroadcastReceiver {
+    public interface ActivityDetectionListener {
+        void onActivityDetected();
+    }
+
     public static Subscription detectedActivitySubscription = null;
+    public static ActivityDetectionListener listener = null;
 
     @Override
     public void onReceive(final Context context, Intent intent) {
+        initializeRideSmart(context);
+    }
+
+    public static void initializeRideSmart(final Context context) {
         if (detectedActivitySubscription != null && !detectedActivitySubscription.isUnsubscribed()) {
             return;
         }
@@ -45,30 +57,34 @@ public class OnPhoneBoot extends BroadcastReceiver {
         // TODO check if app enabled
 
         ReactiveLocationProvider locationProvider = new ReactiveLocationProvider(context);
-        Subscription subscription = locationProvider.getDetectedActivity(1000*60*5) // detectionIntervalMillis
-        .subscribe(new Action1<ActivityRecognitionResult>() {
-            @Override
-            public void call(ActivityRecognitionResult detectedActivity) {
-                if (detectedActivity.getMostProbableActivity().getType() == DetectedActivity.IN_VEHICLE) {
-                    // silence phone
-                    AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-                    SharedPreferences.Editor editor = sharedPrefs.edit();
-                    editor.putBoolean(Utility.SILENCING, true);
-                    editor.putInt(Utility.RINGER_STATE, audioManager.getRingerMode());
-                    audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-                    editor.commit();
+        detectedActivitySubscription = locationProvider.getDetectedActivity(1000*60*5) // detectionIntervalMillis
+                .subscribe(new Action1<ActivityRecognitionResult>() {
+                    @Override
+                    public void call(ActivityRecognitionResult detectedActivity) {
+                        SharedPreferences.Editor editor = sharedPrefs.edit();
+                        if (sharedPrefs.getBoolean(Utility.ENABLED, false) && detectedActivity.getMostProbableActivity().getType() == DetectedActivity.IN_VEHICLE) {
+                            // silence phone
+                            AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+                            editor.putBoolean(Utility.SILENCING, true);
+                            editor.putInt(Utility.RINGER_STATE, audioManager.getRingerMode());
+                            audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 
-                } else {
-                    // unsilence phone
-                    AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-                    audioManager.setRingerMode(sharedPrefs.getInt(Utility.RINGER_STATE, AudioManager.RINGER_MODE_NORMAL));
+                        } else {
+                            // unsilence phone
+                            AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+                            audioManager.setRingerMode(sharedPrefs.getInt(Utility.RINGER_STATE, AudioManager.RINGER_MODE_NORMAL));
 
-                    SharedPreferences.Editor editor = sharedPrefs.edit();
-                    editor.putBoolean(Utility.SILENCING, false);
-                    editor.commit();
-                }
-            }
-        });
-        detectedActivitySubscription = subscription;
+                            editor.putBoolean(Utility.SILENCING, false);
+                        }
+                        editor.putLong(Utility.LAST_CHECKED, System.currentTimeMillis());
+                        editor.apply();
+
+                        listener.onActivityDetected();
+                    }
+                });
+    }
+
+    public static void setActivityDetectionListener(ActivityDetectionListener detectionListener) {
+        listener = detectionListener;
     }
 }
