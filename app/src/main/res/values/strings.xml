@@ -6,5 +6,9 @@
     <string name="action_settings">Settings</string>
     <string name="automated_response">Automated Response:</string>
     <string name="save_auto_response">Save Automated Response</string>
+    <string name="silence_when_driving">Silence when driving</string>
+    <string name="send_automated_response">Send automated response when silent</string>
+    <string name="force_silent">Force silence mode until next check</string>
+    <string name="force_unsilent">Disable silence mode until next check</string>
 
 </resources>

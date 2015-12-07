@@ -32,7 +32,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            tools:text="SILENCE PHONE"
+            android:text="@string/silence_when_driving"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            tools:text="AUTOMATIC TEXT RESPONSE"
+            android:text="@string/send_automated_response"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -67,6 +67,18 @@
     <Button
         android:id="@+id/buttonAutoResponse"
         android:text="@string/save_auto_response"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/buttonForceSilent"
+        android:text="@string/force_silent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/buttonForceUnsilent"
+        android:text="@string/force_unsilent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
