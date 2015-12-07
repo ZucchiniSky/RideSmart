@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="automated_response">Automated Response:</string>
     <string name="save_auto_response">Save Automated Response</string>
-
+    <color name="yellowgreen">#7ed321</color>
+    <color name="lightgreen">#AED581</color>
 </resources>
