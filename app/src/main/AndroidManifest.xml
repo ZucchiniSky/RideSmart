@@ -17,6 +17,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".WhiteListActivity"
+            android:label="AutoResponse WhiteList"
+            android:theme="@style/AppTheme"/>
+
         <receiver android:name=".OnTextReceived">
             <intent-filter>
                 <action android:name="android.provider.telephony.SMS_RECEIVED"/>
