@@ -1,11 +1,9 @@
 package com.mediaamigos.ridesmart;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.format.DateUtils;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,6 +46,11 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(TAG, "launching RideSmart MainActivity");
+
+        Utility.serviceConnector.startServiceAndBind(this);
+
         setContentView(R.layout.activity_main);
 
         isActivated = (TextView) findViewById(R.id.textIsActivated);
@@ -90,7 +93,8 @@ public class MainActivity extends Activity {
             }
         });
 
-        if (OnPhoneBoot.detectedActivitySubscription == null) {
+        if (Utility.serviceConnector.isServiceBound && Utility.serviceConnector.rideSmartService.getSubscription() == null) {
+            Log.d(TAG, "launching RideSmart but no detect activity subscription");
             OnPhoneBoot.initializeRideSmart(getApplicationContext());
         }
 

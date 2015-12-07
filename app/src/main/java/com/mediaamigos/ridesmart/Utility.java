@@ -4,17 +4,12 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
-import android.os.IBinder;
 import android.telephony.SmsManager;
 import android.util.Log;
-
-import com.google.android.gms.location.DetectedActivity;
 
 /**
  * Created by nghiavo on 11/1/15.
@@ -35,22 +30,9 @@ public class Utility {
 
     public static final int NOTIFICATION_ID = 109;
 
-    private static boolean mIsNotificationBound = false;
-    private static NotificationService mNotificationService;
-    private static NotificationService.NotificationBinder mBinder;
-    private static ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            mBinder = (NotificationService.NotificationBinder) iBinder;
-            mNotificationService = mBinder.getService();
-            mIsNotificationBound = true;
-        }
+    public static RideSmartServiceConnector serviceConnector = new RideSmartServiceConnector();
 
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            mIsNotificationBound = false;
-        }
-    };
+    private static boolean mDisableThisTrip = false;
 
     public interface ActivityDetectionListener {
         void onActivityDetected();
@@ -104,6 +86,11 @@ public class Utility {
         }
     }
 
+    public static void disableThisTrip(Context context) {
+        onActivityCheck(false, context);
+        mDisableThisTrip = true;
+    }
+
     public static void onActivityCheck(boolean isDriving, Context context) {
         SharedPreferences sharedPrefs = Utility.getSharedPreferences(context);
         Log.d("Checking activity", TAG);
@@ -112,7 +99,7 @@ public class Utility {
 
         SharedPreferences.Editor editor = sharedPrefs.edit();
         Log.d("enabled is " + sharedPrefs.getBoolean(Utility.ENABLED, false), TAG);
-        if (isDriving) {
+        if (isDriving && !mDisableThisTrip) {
             Log.d("Silencing phone", TAG);
             // silence phone
             AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
@@ -120,7 +107,8 @@ public class Utility {
             editor.putInt(Utility.RINGER_STATE, audioManager.getRingerMode());
             audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 
-        } else {
+        } else if (!isDriving) {
+            mDisableThisTrip = false;
             Log.d("Unsilencing phone", TAG);
             // unsilence phone
             AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
@@ -138,37 +126,47 @@ public class Utility {
         Boolean isSilencing = sharedPrefs.getBoolean(Utility.SILENCING, false);
 
         if (wasSilencing != isSilencing) {
-            if (!mIsNotificationBound) {
-                Intent intent = new Intent(context, NotificationService.class);
-                context.startService(intent);
-                context.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
-            }
-            if (isSilencing) {
-                mNotificationService.startNotification();
+            if (!serviceConnector.isServiceBound) {
+                serviceConnector.startServiceAndBind(context);
+
+                serviceConnector.pendingNotificationState = isSilencing ? RideSmartServiceConnector.PendingNotificationState.START : RideSmartServiceConnector.PendingNotificationState.CANCEL;
             } else {
-                mNotificationService.cancelNotification();
+                if (isSilencing) {
+                    serviceConnector.rideSmartService.startNotification();
+                } else {
+                    serviceConnector.rideSmartService.cancelNotification();
+                }
             }
         }
     }
 
     public static Notification buildNotification(Context context) {
-        Notification.Builder builder =
-                new Notification.Builder(context)
-                        .setSmallIcon(R.drawable.common_signin_btn_text_light)
-                        .setContentTitle("RideSmart is running")
-                        .setContentText("Focus on the road!")
-                        .setOngoing(true);
-        Intent resultIntent = new Intent(context, MainActivity.class);
+        Intent activityIntent = new Intent(context, MainActivity.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent =
+        stackBuilder.addNextIntent(activityIntent);
+        PendingIntent piActivityIntent =
                 stackBuilder.getPendingIntent(
                         0,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
-        builder.setContentIntent(resultPendingIntent);
+
+        Notification.Builder builder =
+                new Notification.Builder(context)
+                        .setSmallIcon(R.drawable.logo)
+                        .setContentTitle("RideSmart is running")
+                        .setContentText("Focus on the road!")
+                        .setOngoing(true)
+                        .setContentIntent(piActivityIntent);
+
+        Intent dismissIntent = new Intent(context, NotificationResponseService.class);
+        PendingIntent piDismiss = PendingIntent.getService(context, 0, dismissIntent, 0);
+
+        builder.setStyle(new Notification.BigTextStyle()
+                .bigText("Focus on the road!"))
+                .addAction(R.drawable.ic_clear_search_api_disabled_holo_light, context.getString(R.string.dismiss), piDismiss);
+
         return builder.build();
     }
 }

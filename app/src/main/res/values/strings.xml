@@ -10,6 +10,7 @@
     <string name="send_automated_response">Send automated response when silent</string>
     <string name="force_silent">Force silence mode until next check</string>
     <string name="force_unsilent">Disable silence mode until next check</string>
+    <string name="dismiss">Disable for this trip</string>
 
     <color name="yellowgreen">#7ed321</color>
     <color name="lightgreen">#AED581</color>
