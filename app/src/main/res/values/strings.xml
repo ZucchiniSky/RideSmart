@@ -6,5 +6,8 @@
     <string name="action_settings">Settings</string>
     <string name="automated_response">Automated Response:</string>
     <string name="save_auto_response">Save Automated Response</string>
+    <string name="edit_whitelist">Edit Whitelist for Text Response</string>
+    <string name="save_whitelist">Save to Whitelist</string>
+    <string name="back_to_menu">Back To Menu</string>
 
 </resources>

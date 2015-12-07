@@ -17,7 +17,7 @@ public class Utility {
     public static final String RINGER_STATE = "RINGER_STATE";
     public static final String TEXT_RESPONSE_ENABLED = "TEXT_RESPONSE_ENABLED";
     public static final String TEXT_RESPONSE_BODY = "TEXT_RESPONSE_BODY";
-
+    public static final String WHITELIST = "WHITELIST";
     public static final String TEXT_RESPONSE_BODY_DEFAULT = "HEY, I'M DRIVING!!!";
 
     public static SharedPreferences getSharedPreferences(Context context) {
