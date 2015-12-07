@@ -115,7 +115,7 @@ public class MainActivity extends Activity {
 
     public void openWhiteList(View view) {
         Intent intent = new Intent(this, WhiteListActivity.class);
-        EditText editText = (EditText) findViewById(R.id.editWhitelist);
+        EditText editText = (EditText) findViewById(R.id.buttonEditWhitelist);
         startActivity(intent);
     }
 }

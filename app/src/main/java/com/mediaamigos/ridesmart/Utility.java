@@ -47,7 +47,7 @@ public class Utility {
             editor.putString(TEXT_RESPONSE_BODY, TEXT_RESPONSE_BODY_DEFAULT);
         }
 
-        editor.commit();
+        editor.apply();
     }
 
     public static void sendText(Context context, String phoneNumber) {
