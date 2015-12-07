@@ -7,80 +7,115 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:background="@color/lightgreen"
+    tools:context=".MainActivity"
+    android:weightSum="1">
+
+    <ImageView
+        android:layout_width="180dp"
+        android:layout_height="@dimen/activity_vertical_margin"
+        android:src="@drawable/logo"
+        android:layout_weight="0.45"
+        android:layout_gravity="center_horizontal"/>
 
     <TextView
         android:id="@+id/textIsActivated"
         tools:text="RIDESMART IS SILENCING"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"/>
 
     <TextView
         android:id="@+id/textLastChecked"
         tools:text="LAST TIME CHECKED ACTIVITY"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:background="@color/lightgreen">
 
-        <CheckBox
-            android:id="@+id/checkBoxSilencePhone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
-        <TextView
-            android:text="@string/silence_when_driving"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+            <CheckBox
+                android:id="@+id/checkBoxSilencePhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:text="@string/silence_when_driving"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
-        <CheckBox
-            android:id="@+id/checkBoxAutoResponse"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
-        <TextView
-            android:text="@string/send_automated_response"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <CheckBox
+                android:id="@+id/checkBoxAutoResponse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:text="@string/send_automated_response"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/automated_response"/>
+        android:text="@string/automated_response"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"/>
 
     <EditText
         android:id="@+id/editTextAutoResponse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="HEY, I'M DRIVING!!!"/>
+        tools:text="HEY, I'M DRIVING!!!"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"/>
 
     <Button
         android:id="@+id/buttonAutoResponse"
         android:text="@string/save_auto_response"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/yellowgreen"/>
 
     <Button
         android:id="@+id/buttonForceSilent"
         android:text="@string/force_silent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@color/yellowgreen" />
 
     <Button
         android:id="@+id/buttonForceUnsilent"
         android:text="@string/force_unsilent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+        android:layout_height="wrap_content"
+        android:background="@color/yellowgreen" />
 
 </LinearLayout>
