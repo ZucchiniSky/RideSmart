@@ -20,6 +20,6 @@ public class OnTextReceived extends BroadcastReceiver {
         Object[] pdus = (Object[]) bundle.get("pdus");
         final SmsMessage[] messages = new SmsMessage[pdus.length];
         messages[0] = SmsMessage.createFromPdu((byte[]) pdus[0]);
-        Utility.sendText(context, messages[0].getOriginatingAddress());
+        Utility.sendAutoResponse(context, messages[0].getOriginatingAddress());
     }
 }

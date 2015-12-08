@@ -38,7 +38,7 @@ public class OnPhoneBoot extends BroadcastReceiver {
                 super.onCallStateChanged(state, incomingNumber);
                 if (state == TelephonyManager.CALL_STATE_RINGING) {
                     Log.d("Intercepting call", TAG);
-                    Utility.sendText(context.getApplicationContext(), incomingNumber);
+                    Utility.sendAutoResponse(context.getApplicationContext(), incomingNumber);
                 }
             }
         }, PhoneStateListener.LISTEN_CALL_STATE);

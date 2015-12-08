@@ -11,6 +11,10 @@ import android.media.AudioManager;
 import android.telephony.SmsManager;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by nghiavo on 11/1/15.
  */
@@ -25,7 +29,8 @@ public class Utility {
     public static final String RINGER_STATE = "RINGER_STATE";
     public static final String TEXT_RESPONSE_ENABLED = "TEXT_RESPONSE_ENABLED";
     public static final String TEXT_RESPONSE_BODY = "TEXT_RESPONSE_BODY";
-
+    public static final String WHITELIST_COUNT = "WHITELIST_COUNT";
+    public static final String WHITELIST_ENTRY = "WHITELIST_ENTRY";
     public static final String TEXT_RESPONSE_BODY_DEFAULT = "HEY, I'M DRIVING!!!";
 
     public static final int NOTIFICATION_ID = 109;
@@ -74,10 +79,22 @@ public class Utility {
         editor.apply();
     }
 
-    public static void sendText(Context context, String phoneNumber) {
+    public static void sendAutoResponse(Context context, String phoneNumber) {
         Log.d("Checking to send text", TAG);
         SharedPreferences sharedPrefs = getSharedPreferences(context);
-        if (sharedPrefs.getBoolean(SILENCING, false) && sharedPrefs.getBoolean(TEXT_RESPONSE_ENABLED, false)) {
+
+        int whiteListCount = sharedPrefs.getInt(Utility.WHITELIST_COUNT, 0);
+
+        Set<String> phoneNumbers = new HashSet<String>();
+
+        for (int i = 0; i < whiteListCount; i++) {
+            String whiteListedNumber = sharedPrefs.getString(Utility.WHITELIST_ENTRY + i, "");
+            if (whiteListedNumber.isEmpty()) continue;
+
+            phoneNumbers.add(whiteListedNumber);
+        }
+
+        if (sharedPrefs.getBoolean(SILENCING, false) && sharedPrefs.getBoolean(TEXT_RESPONSE_ENABLED, false) && phoneNumbers.contains(phoneNumber)) {
             Log.d("Sending text", TAG);
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNumber, null, sharedPrefs.getString(TEXT_RESPONSE_BODY, TEXT_RESPONSE_BODY_DEFAULT), null, null);

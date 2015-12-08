@@ -116,6 +116,15 @@
         android:text="@string/force_unsilent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:background="@color/yellowgreen" />
+
+    <Button
+        android:id="@+id/buttonEditWhitelist"
+        android:text="@string/edit_whitelist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/yellowgreen"
+        android:onClick="openWhiteList" />
 
 </LinearLayout>

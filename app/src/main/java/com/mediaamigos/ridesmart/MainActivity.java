@@ -13,9 +13,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.content.Intent;
 
 import java.lang.Override;
-
 
 public class MainActivity extends Activity {
     public static final String TAG = "MainActivity";
@@ -135,5 +135,10 @@ public class MainActivity extends Activity {
         silencePhone.setChecked(sharedPrefs.getBoolean(Utility.ENABLED, false));
         sendAutomatedResponse.setChecked(sharedPrefs.getBoolean(Utility.TEXT_RESPONSE_ENABLED, false));
         automatedResponseText.setText(sharedPrefs.getString(Utility.TEXT_RESPONSE_BODY, Utility.TEXT_RESPONSE_BODY_DEFAULT));
+    }
+
+    public void openWhiteList(View view) {
+        Intent intent = new Intent(this, WhiteListActivity.class);
+        startActivity(intent);
     }
 }
